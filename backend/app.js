@@ -12,7 +12,7 @@ import adminRouter from './routes/adminrouter.js';
 const app = express();
 
 // Define the port
-const port = 3000;
+const port = 5000;
 
 // Load the environment variables
 dotenv.config();
