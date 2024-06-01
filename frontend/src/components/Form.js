@@ -1,6 +1,6 @@
 import React from "react";
 
-function Form() {
+const Form = () => {
   return (
     <div className="bg-white px-20 py-10 rounded-3xl border-2 border-gray-100">
       <h1 className="text-6xl font-semibold justify-center flex">Welcome</h1>
@@ -26,7 +26,7 @@ function Form() {
         <div className="mt-8 flex justify-between items-center">
           <div>
             <input type="checkbox" id="remember" />
-            <label className="ml-2 font-medium text-base" for="remember">
+            <label className="ml-2 font-medium text-base" htmlFor="remember">
               Remember me
             </label>
           </div>
@@ -35,10 +35,10 @@ function Form() {
           </button>
         </div>
         <div className="mt-8 flex flex-col gap-y-4">
-          <button className=" hover:scale-[1.01] ease-in-out active:scale-[.98] active:duration-78 transition-all  py-3 rounded-xl bg-violet-500 text-lg text-white font-semibold">
+          <button className="hover:scale-[1.01] ease-in-out active:scale-[.98] active:duration-78 transition-all py-3 rounded-xl bg-violet-500 text-lg text-white font-semibold">
             Sign in
           </button>
-          <button className="flex py-3 rounded-xl border-2 border-gray-100 item justify-center gap-2 hover:scale-[1.01] ease-in-out active:scale-[.98] active:duration-78 transition-all ">
+          <button className="flex py-3 rounded-xl border-2 border-gray-100 item justify-center gap-2 hover:scale-[1.01] ease-in-out active:scale-[.98] active:duration-78 transition-all">
             <svg width="24" height="24" viewBox="0 0 48 48">
               <path
                 fill="#FFC107"

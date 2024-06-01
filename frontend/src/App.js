@@ -1,4 +1,4 @@
-import Form from "./components/Form";
+import { Form } from "./components/export";
 function App() {
   return (
     <div className=" flex w-full h-screen">
