@@ -1,22 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-
-import {Home, AdminHome, UserHome} from './pages/export';
-import {Navbar} from './components/export';
-
+import Form from "./components/Form";
 function App() {
   return (
-    <div className="App bg-slate-600">
-    {/* <Navbar /> */}
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<AdminHome />} />
-            <Route path="/user" element={<UserHome />} />
-          </Routes>
-        </Router>
-
+    <div className=" flex w-full h-screen">
+      <div className="flex w-full items-center justify-center">
+        <Form />
+      </div>
     </div>
   );
 }
