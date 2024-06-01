@@ -3,10 +3,12 @@ import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 import {Home, AdminHome, UserHome} from './pages/export';
+import {Navbar} from './components/export';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-slate-600">
+    {/* <Navbar /> */}
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
