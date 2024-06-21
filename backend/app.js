@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import mqtt from 'mqtt';
 import dotenv from 'dotenv';
 
@@ -11,11 +12,27 @@ import adminRouter from './routes/adminrouter.js';
 // Create an express app
 const app = express();
 
+app.use(express.json());
+
 // Define the port
 const port = 5000;
 
 // Load the environment variables
 dotenv.config();
+
+// load database connection string
+const mongoString = process.env.DATABASE_URL;
+
+mongoose.connect(mongoString);
+const database = mongoose.connection
+
+database.on('error', (error) => {
+    console.log(error)
+})
+
+database.once('connected', () => {
+    console.log('Database Connected');
+})
 
 var options = {
     host: process.env.mqtthost,
