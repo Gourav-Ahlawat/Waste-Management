@@ -1,1 +1,1 @@
-export {default as Model} from './model.js'
+export {default as EmployeeModel} from './employeeModel.js'

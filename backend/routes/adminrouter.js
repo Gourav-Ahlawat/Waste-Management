@@ -1,5 +1,6 @@
 import express from 'express';
-import {Model} from '../model/export.js';
+import {EmployeeModel} from '../model/export.js';
+import bcrypt from 'bcryptjs';
 
 const adminRouter = express.Router();
 
@@ -14,23 +15,34 @@ adminRouter.get("/panel", function (req, res) {
 });
 
 //Post Method
-adminRouter.post('/post', async(req, res) => {
-  const data = new Model({
+adminRouter.post('/post', async (req, res) => {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+  const data = {
     name: req.body.name,
-    age: req.body.age})
-    try {
-      const dataToSave = data.save();
-      res.status(200).json(dataToSave)
+    email: req.body.email,
+    phone_number: req.body.phone_number,
+    employee_id: req.body.employee_id,
+    role: req.body.role,
+    password: hashedPassword
+  };
+  try {
+    const result = await EmployeeModel.create(data);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error creating employee:', error); // Log the error for debugging
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.employee_id) {
+      res.status(400).json({ message: 'employee id already exists, use update if you want to update it' });
+    } else {
+      res.status(400).json({ message: error.message });
+    }
   }
-  catch (error) {
-      res.status(400).json({message: error.message})
-  }
-})
+});
 
 //Get all Method
 adminRouter.get('/getAll', async(req, res) => {
   try{
-    const data = await Model.find();
+    const data = await EmployeeModel.find();
     res.json(data)
 }
 catch(error){
@@ -41,7 +53,7 @@ catch(error){
 //Get by ID Method
 adminRouter.get('/getOne/:id', async (req, res) => {
   try{
-      const data = await Model.findById(req.params.id);
+      const data = await EmployeeModel.findOne({employee_id: req.params.id});
       res.json(data)
   }
   catch(error){
@@ -56,22 +68,26 @@ adminRouter.patch('/update/:id', async (req, res) => {
       const updatedData = req.body;
       const options = { new: true };
 
-      const result = await Model.findByIdAndUpdate(
-          id, updatedData, options
-      )
+      const result = await EmployeeModel.findOneAndUpdate(
+          {employee_id: id}, updatedData, options
+      );
 
-      res.send(result)
+      if (!result) {
+        res.status(404).json({ message: 'No record found to update' });
+      } else {
+        res.send(result);
+      }
   }
   catch (error) {
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: error.message });
   }
-})
+});
 
 //Delete by ID Method
 adminRouter.delete('/delete/:id', async (req, res) => {
   try {
       const id = req.params.id;
-      const data = await Model.findByIdAndDelete(id)
+      const data = await EmployeeModel.findOneAndDelete({employee_id: id})
       res.send(`Document with ${data.name} has been deleted..`)
   }
   catch (error) {

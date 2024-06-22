@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import mqtt from 'mqtt';
 import dotenv from 'dotenv';
-
 // Import the user router
 import userRouter from './routes/userrouter.js';
 
