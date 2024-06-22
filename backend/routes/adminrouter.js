@@ -27,7 +27,7 @@ adminRouter.post('/post', async (req, res) => {
     password: hashedPassword
   };
   try {
-    const result = await EmployeeModel.create(data);
+    const result = await EmployeeModel.save(data);
     res.status(200).json(result);
   } catch (error) {
     console.error('Error creating employee:', error); // Log the error for debugging
