@@ -34,7 +34,7 @@ const employee_schema = new Schema({
 // Compare the given password with the hashed password in the database
 employee_schema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
-  };
+};
 
 // Create a model based on the schema
 const EmployeeModel = model('Employees', employee_schema);

@@ -1,8 +1,8 @@
 import express from 'express';
-import { employee_login } from '../controllers/export.js';
+import { admin_login } from '../controllers/export.js';
 
 const employeeAuthRouter = express.Router();
 
-employeeAuthRouter.post('/login', employee_login);
+employeeAuthRouter.post('/login', admin_login);
 
 export default employeeAuthRouter;
