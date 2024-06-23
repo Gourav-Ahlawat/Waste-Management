@@ -64,7 +64,9 @@ employeeUserRouter.patch('/managerops/requests/:id', managerops_authenticate, as
       if (status === 'approved') {
         const data = await BillingModel.findOne({ client_id: result.client_id });
         if (data) {
-          const updatedData = { total_weight: data.total_weight + result.weight };
+          const updatedData = { total_weight: data.total_weight + result.weight,
+             total_unpaid_weight: data.total_unpaid_weight + result.weight
+           };
           const options = { new: true };
           await BillingModel.findOneAndUpdate(
             { client_id: result.client_id }, updatedData, options
@@ -74,7 +76,8 @@ employeeUserRouter.patch('/managerops/requests/:id', managerops_authenticate, as
             client_name: result.client_name,
             client_address: result.client_address,
             client_id: result.client_id,
-            total_weight: result.weight
+            total_weight: result.weight,
+            total_unpaid_weight: result.weight
           };
           await BillingModel.create(billingData);
         }
@@ -87,9 +90,55 @@ employeeUserRouter.patch('/managerops/requests/:id', managerops_authenticate, as
     res.status(500).json({ message: error.message })
   }
 });
+
 //manager finance routes
 employeeUserRouter.get('/managerfin', managerfin_authenticate, (req, res) => {
   res.json({ message: `Welcome manager finance ${req.user.employee_id}` });
 });
 
+employeeUserRouter.get('/managerfin/billing', managerfin_authenticate, async (req, res) => {
+  try {
+    const data = await BillingModel.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+});
+
+employeeUserRouter.get('/managerfin/billing/:id', managerfin_authenticate, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await BillingModel.findOne({ client_id: id });
+    if (data) {
+      if(data.total_unpaid_weight === 0){
+        res.status(200).json({ message: 'No unpaid weight', data: data});
+      } else {
+        res.status(200).json(data);
+      }
+    } else {
+      res.status(404).json({ message: 'No record found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+});
+
+employeeUserRouter.patch('/managerfin/paid/:id', managerfin_authenticate, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await BillingModel.findOne({ client_id: id });
+    if (data) {
+      const updatedData = { total_unpaid_weight: 0 };
+      const options = { new: true };
+      const result = await BillingModel.findOneAndUpdate(
+        { client_id: id }, updatedData, options
+      );
+      res.status(200).json(result);
+    } else {
+      res.status(404).json({ message: 'No record found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+});
 export default employeeUserRouter;
