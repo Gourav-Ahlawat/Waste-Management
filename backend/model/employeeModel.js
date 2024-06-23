@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const employee_schema = new Schema({
+const employeeSchema = new Schema({
 
     name: {
         type: String,
@@ -32,11 +32,11 @@ const employee_schema = new Schema({
 });
 
 // Compare the given password with the hashed password in the database
-employee_schema.methods.comparePassword = async function (password) {
+employeeSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
 };
 
 // Create a model based on the schema
-const EmployeeModel = model('Employees', employee_schema);
+const EmployeeModel = model('Employees', employeeSchema);
 
 export default EmployeeModel;
