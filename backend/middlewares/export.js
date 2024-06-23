@@ -1,1 +1,3 @@
-export {default as employee_authenticate} from './employeeauth.js';
+export {default as driver_authenticate} from './driverauth.js';
+export {default as managerops_authenticate} from './manageropsauth.js';
+export {default as managerfin_authenticate} from './managerfinauth.js';

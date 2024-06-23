@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {EmployeeModel} from '../model/export.js';
 
-const employee_authenticate = async (req, res, next) => {
+const managerops_authenticate = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
@@ -14,7 +14,9 @@ const employee_authenticate = async (req, res, next) => {
       if (!user) {
         return res.status(404).json({ message: 'Employee not found' });
       }
-  
+      if(user.role !== 'manager_operations'){
+        return res.status(401).json({ message: 'Unauthorized user' });
+      }
       req.user = user;
       next();
     } catch (error) {
@@ -22,4 +24,4 @@ const employee_authenticate = async (req, res, next) => {
     }
   };
   
-  export default employee_authenticate;
+  export default managerops_authenticate;

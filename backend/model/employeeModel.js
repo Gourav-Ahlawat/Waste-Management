@@ -31,21 +31,6 @@ const employee_schema = new Schema({
 
 });
 
-employee_schema.pre('save', async function (next) {
-    const employee = this;
-    if (!employee.isModified('password')) {
-        return next();
-    }
-    try{
-        const salt = await bcrypt.genSalt();
-        employee.password = await bcrypt.hash(employee.password, salt);
-        next();
-    }catch(error){
-        console.error('Error creating employee:', error); // Log the error for debugging
-        return next(error);
-    }
-});
-
 // Compare the given password with the hashed password in the database
 employee_schema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);

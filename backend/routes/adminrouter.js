@@ -27,7 +27,7 @@ adminRouter.post('/post', async (req, res) => {
     password: hashedPassword
   };
   try {
-    const result = await EmployeeModel.save(data);
+    const result = await EmployeeModel.create(data);
     res.status(200).json(result);
   } catch (error) {
     console.error('Error creating employee:', error); // Log the error for debugging
@@ -67,6 +67,10 @@ adminRouter.patch('/update/:id', async (req, res) => {
       const id = req.params.id;
       const updatedData = req.body;
       const options = { new: true };
+
+      if (updatedData.password) {
+        updatedData.password = await bcrypt.hash(updatedData.password, 10);
+      }
 
       const result = await EmployeeModel.findOneAndUpdate(
           {employee_id: id}, updatedData, options
