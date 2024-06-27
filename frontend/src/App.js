@@ -1,10 +1,10 @@
-import Form from "./components/Form";
+import Login from "./components/Login";
 
 function App() {
   return (
     <div className=" flex w-full h-screen">
       <div className="flex w-full items-center justify-center">
-        <Form />
+        <Login />
       </div>
     </div>
   );
