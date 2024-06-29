@@ -1,5 +1,4 @@
-import Login from "./components/Login";
-
+import { Login } from "./components/export";
 function App() {
   return (
     <div className=" flex w-full h-screen">
