@@ -60,7 +60,7 @@ const Driver = () => {
         </div>
       </div>
       {/* Main content */}
-      <div className="flex items-center justify-center h-96 mt-12 p-28 ml-80">
+      <div className="flex items-center justify-center h-96 mt-32  ml-80 ">
         <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md border-t-slate-800">
           <h2 className="text-4xl text-center mb-4">Driver Login</h2>
           <hr
@@ -83,10 +83,9 @@ const Driver = () => {
           />
           <div className="flex justify-center mt-4">
             <input
-              className="mb-4 p-2 items-center"
+              className="mb-4 p-2 items-center bg-slate-200"
               id="username"
               type="text"
-              style={{ backgroundColor: "#F4FAED" }}
             />
           </div>
           <div className="mb-4 flex justify-center">
