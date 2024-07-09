@@ -1,5 +1,6 @@
-import { Login } from "./components/export";
-import { Home, AdminHome, Driver } from "./pages/export";
+// import { Login } from "./components/export";
+import Driver from "./pages/driver";
+
 function App() {
   return (
     <div className=" flex w-full h-screen">
