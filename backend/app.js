@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import mqtt from 'mqtt';
 import dotenv from 'dotenv';
 
@@ -10,7 +11,7 @@ import employeeAuthRouter from './routes/employeeauth.js';
 import employeeUserRouter from './routes/employeerouter.js';
 
 // Import the admin router
-import adminAuthRouter from './routes/adminauth.js'
+import adminAuthRouter from './routes/adminauth.js';
 import adminRouter from './routes/adminrouter.js';
 
 // Load the environment variables
@@ -21,6 +22,10 @@ const app = express();
 
 connectDB();
 
+// Enable CORS for all routes
+app.use(cors());
+
+// Parse JSON bodies
 app.use(express.json());
 
 // Define the port
@@ -37,8 +42,9 @@ app.use('/auth', employeeAuthRouter);
 // Define a route for the user page
 app.use('/user', employeeUserRouter);
 
-//Define a route for admin login
-app.use('/adminauth', adminAuthRouter)
+// Define a route for admin login
+app.use('/adminauth', adminAuthRouter);
+
 // Define a route for the admin page
 app.use('/admin', adminRouter);
 
@@ -46,6 +52,7 @@ app.use('/admin', adminRouter);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
 
 //mqtt thing
 var options = {

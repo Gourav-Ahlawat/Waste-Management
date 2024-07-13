@@ -3,28 +3,31 @@ import axios from 'axios';
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
 import vehicle from "../images/vehicle.png";
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const [employeeId, setEmployeeId] = useState('');
-  const [password, setPassword] = useState('');
+const AdminLogin = () => {
+    const [adminId, setAdminId] = useState('');
+    const [adminPassword, setAdminPassword] = useState('');
+    const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/auth/login', {
-        employee_id: employeeId,  // Use employee_id to match backend
-        password,
-      });
-      if (response.data.message === 'Login successful') {
-        alert('Login successful');
-        // Save the token, redirect, etc.
-      } else {
-        alert('Invalid credentials');
-      }
-    } catch (error) {
-      console.error('Error logging in', error);
-      alert('An error occurred. Please try again.');
-    }
-  };
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/adminauth/login', {
+                admin_id: adminId,
+                admin_password: adminPassword,
+            });
+            if (response.data.message === 'Login successful') {
+                alert('Login successful');
+                // Redirect to admin about page
+                navigate('/admin/about');
+            } else {
+                alert('Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error logging in', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
   return (
     <div className="w-full h-screen relative flex justify-center items-center">
@@ -62,8 +65,8 @@ const Login = () => {
               type="text"
               style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
               placeholder="Employee ID"
-              value={employeeId}
-              onChange={(e) => setEmployeeId(e.target.value)}
+              value={adminId}
+              onChange={(e) => setAdminId(e.target.value)}
             />
           </div>
           <div>
@@ -73,8 +76,8 @@ const Login = () => {
               type="password"
               placeholder="Password"
               style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
             />
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between mb-4">
@@ -99,4 +102,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;
