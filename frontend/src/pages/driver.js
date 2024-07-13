@@ -68,7 +68,7 @@ const Driver = () => {
             className="w-full border-spacing-px mb-8 md:mb-12"
           />
           <div className="mb-4">
-            <label className="block text-2xl text-gray-700 mb-2 text-center mb-4">
+            <label className="block text-2xl text-gray-700  text-center mb-4">
               Select Client
             </label>
             <select className="w-full p-2 border border-b-4 rounded">
