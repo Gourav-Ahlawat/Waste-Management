@@ -1,13 +1,15 @@
 // import { Login } from "./components/export";
-import Driver from "./pages/driver";
-//import ManagerOperation from "./pages/ManagerOperation";
+//import Driver from "./pages/driver";
+
+import Manager from "./pages/Manager";
+
 function App() {
   return (
     <div className=" flex w-full h-screen">
       <div className="flex w-full items-center justify-center">
         {/* <Login /> */}
-        <Driver />
-        {/* <ManagerOperation /> */}
+        {/* <Driver /> */}
+        <Manager />
       </div>
     </div>
   );
