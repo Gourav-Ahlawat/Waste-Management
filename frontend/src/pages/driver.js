@@ -4,7 +4,8 @@ import logo from "../images/logo.png";
 import { TiUser } from "react-icons/ti";
 import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
 import FetchUserDetails from "../utils/fetchUserDetails";
-import CaptureWeight from "../utils/captureWeight"; // Import the CaptureWeight function
+import CaptureWeight from "../utils/captureWeight";
+import SubmitWeight from "../utils/submitWeight";
 import { useNavigate } from 'react-router-dom';
 
 const Driver = () => {
@@ -54,7 +55,17 @@ const Driver = () => {
     }
   };
 
-
+  const handleSubmitWeight = async () => {
+    try {
+      const response = await SubmitWeight(capturedWeight); // Call SubmitWeight function with capturedWeight
+      console.log('Submit weight response:', response);
+      alert('Weight submitted successfully');
+      // Handle success or display confirmation to user
+    } catch (error) {
+      console.error('Error submitting weight:', error);
+      alert('Failed to submit weight. Please try again.');
+    }
+  };
   if (isLoading) {
     return (
       <div class="text-center">
@@ -169,6 +180,7 @@ const Driver = () => {
                 <button
                   type="button"
                   className="w-1/2 bg-green text-white py-2 rounded hover:bg-green-600"
+                  onClick={handleSubmitWeight}
                 >
                   Submit
                 </button>

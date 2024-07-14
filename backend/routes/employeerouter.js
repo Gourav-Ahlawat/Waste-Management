@@ -62,7 +62,7 @@ employeeUserRouter.post('/driver/clientrequest', driver_authenticate, async (req
   };
   try {
     const result = await ClientModel.create(data);
-    res.status(200).json(result);
+    res.status(200).json({ message: 'Operation successful' });
   } catch (error) {
     console.error('Error creating client request:', error);
     res.status(400).json({ message: error.message });
