@@ -1,5 +1,4 @@
-import FrameComponent1 from "../components/FrameComponent1";
-import FrameComponent from "../components/FrameComponent";
+
 import TableHeader from "../components/TableHeader";
 
 const ManagerFin = () => {
@@ -10,8 +9,7 @@ const ManagerFin = () => {
         alt=""
         src="/17-1@2x.png"
       />
-      <FrameComponent1 />
-      <FrameComponent />
+
       <section className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[440px] box-border max-w-full mt-[-831px] lg:pl-[220px] lg:box-border mq450:pl-5 mq450:box-border mq750:pl-[110px] mq750:box-border">
         <TableHeader />
       </section>
