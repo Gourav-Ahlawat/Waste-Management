@@ -4,7 +4,7 @@ import { TiUser } from "react-icons/ti";
 import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
 import FetchUserDetails from "../utils/fetchUserDetails";
 import FetchPendingRequests from "../utils/fetchPendingRequests";
-import TableHeader from "../components/TableHeader";
+import TableHeader from "../components/pendingApprovalsTable";
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
 
