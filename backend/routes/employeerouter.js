@@ -1,12 +1,54 @@
 import express from 'express';
 import { driver_authenticate, managerops_authenticate, managerfin_authenticate } from '../middlewares/export.js';
 import { ClientModel, BillingModel } from '../model/export.js';
+import mqtt from 'mqtt';
 
 const employeeUserRouter = express.Router();
+
+// MQTT setup
+const mqttOptions = {
+  host: process.env.mqtthost,
+  port: process.env.mqttport,
+  protocol: 'mqtts',
+  username: process.env.mqttusername,
+  password: process.env.mqttpassword,
+};
+
+const client = mqtt.connect(mqttOptions);
+
+client.on('connect', function () {
+  console.log('MQTT Connected');
+  client.subscribe('my/test/topic', function (err) {
+    if (err) {
+      console.error('Error subscribing to MQTT topic:', err);
+    } else {
+      console.log('Subscribed to MQTT topic');
+    }
+  });
+});
+
+client.on('error', function (error) {
+  console.error('MQTT Error:', error);
+});
+
+let capturedWeight = null;
+
+client.on('message', function (topic, message) {
+  console.log('Received message:', topic, message.toString());
+  capturedWeight = message.toString(); // Store the received weight
+});
+
+
 
 //driver routes
 employeeUserRouter.get('/driver', driver_authenticate, (req, res) => {
   res.json({ message: `Welcome driver ${req.user.employee_id}` });
+});
+
+employeeUserRouter.get('/driver/captureWeight', driver_authenticate, async (req, res) => {
+  // Simulate capture weight operation
+  client.publish('my/test/topic', 'Hello'); // Publish message to MQTT topic
+  res.json({ message: 'Weight capture initiated' });
 });
 
 employeeUserRouter.post('/driver/clientrequest', driver_authenticate, async (req, res) => {

@@ -1,7 +1,8 @@
 import Login from "./components/login";
 import AdminLogin from "./components/adminLogin";
 import Driver from "./pages/driver";
-import Manager from "./pages/Manager";
+import ManagerOps from "./pages/ManagerOps";
+import ManagerFin from "./pages/ManagerFin";
 import LandingPage from "./pages/landingPage";
 import AdminHome from "./pages/adminhome";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -15,7 +16,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/adminLogin" element={<AdminLogin />} />
-            <Route path="/manager" element={<Manager />} />
+            <Route path="/managerOps" element={<ManagerOps />} />
+            <Route path="/managerFin" element={<ManagerFin />} />
             <Route path="/driver" element={<Driver />} />
             <Route path="/admin/about" element={<AdminHome />} />
           </Routes>

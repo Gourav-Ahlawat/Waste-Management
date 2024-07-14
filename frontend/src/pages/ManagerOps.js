@@ -2,7 +2,7 @@ import FrameComponent1 from "../components/FrameComponent1";
 import FrameComponent from "../components/FrameComponent";
 import TableHeader from "../components/TableHeader";
 
-const Manager = () => {
+const ManagerOps = () => {
   return (
     <div className="w-full relative  bg-floralwhite overflow-hidden flex flex-col items-start justify-start leading-[normal] tracking-[normal]">
       <img
@@ -19,4 +19,4 @@ const Manager = () => {
   );
 };
 
-export default Manager;
+export default ManagerOps;
