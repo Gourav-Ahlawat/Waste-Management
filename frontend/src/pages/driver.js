@@ -72,7 +72,7 @@ const Driver = () => {
   return (
     <div className="w-full h-screen relative">
       <div
-        className="absolute inset-0 bg-cover bg-center "
+        className="absolute inset-0 bg-cover bg-center flex-col"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div
@@ -84,94 +84,95 @@ const Driver = () => {
               className="w-10 h-10 rounded-full p-1"
               style={{ backgroundColor: "#DFEFDF" }}
             />
-            <select className="text-2xl ml-2">
-              <option>Ryan Gosling</option>
-              <option>Shaikh</option>
-              <option>Gourav</option>
+            <select className="text-2xl ml-2" onChange={handleLogout}>
+              <option>{username}</option>
+              <option>Logout</option>
             </select>
           </div>
         </div>
-        {/* Left section */}
-        <div className="absolute left-0 top-0 h-screen w-64 p-8 shadow-lg z-10">
-          <img src={logo} alt="Logo" className="w-40 h-auto mb-12 mx-auto" />
-          <div className="flex flex-col items-center space-y-4">
-            <div className="mt-8 items-center space-x-2">
-              <TiUser
-                className="w-20 p-2 h-20 ml-6 rounded-full mb-4"
-                style={{ backgroundColor: "#DFEFDF" }}
-              />
-              <div>
-                <p className="text-lg text-center font-semibold mb-1">{username}</p>
-                <p className="text-sm text-center text-gray-600">Driver</p>
+        <div class="flex px-80 justify-end">
+          {/* Left section */}
+          <div className="absolute left-0 top-0 h-screen w-64 p-8 shadow-lg z-10">
+            <img src={logo} alt="Logo" className="w-40 h-auto mb-12 mx-auto" />
+            <div className="flex flex-col items-center space-y-4">
+              <div className="mt-8 items-center space-x-2">
+                <TiUser
+                  className="w-20 p-2 h-20 ml-6 rounded-full mb-4"
+                  style={{ backgroundColor: "#DFEFDF" }}
+                />
+                <div>
+                  <p className="text-lg text-center font-semibold mb-1">{username}</p>
+                  <p className="text-sm text-center text-gray-600">Driver</p>
+                </div>
               </div>
-            </div>
-            <div className="mt-12 space-y-6 text-gray-600">
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <MdSupport className="w-8 h-8" />
-                <button className="text-lg">Support</button>
-              </div>
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <MdHistory className="w-8 h-8" />
-                <button className="text-lg">History</button>
-              </div>
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <MdSettings className="w-8 h-8" />
-                <button className="text-lg">Settings</button>
+              <div className="mt-12 space-y-6 text-gray-600">
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <MdSupport className="w-8 h-8" />
+                  <button className="text-lg">Support</button>
+                </div>
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <MdHistory className="w-8 h-8" />
+                  <button className="text-lg">History</button>
+                </div>
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <MdSettings className="w-8 h-8" />
+                  <button className="text-lg">Settings</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* Capture Weight and Submit section */}
-        <div className="flex items-center justify-center h-96 mt-32 ml-80">
-          <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md border-t-slate-800">
-            <h2 className="text-4xl text-center mb-4">Driver Login</h2>
-            <hr
-              style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
-              className="w-full border-spacing-px mb-8 md:mb-12"
-            />
-            <div className="mb-4">
-              <label className="block text-2xl text-gray-700 text-center mb-4">
-                Select Client
-              </label>
-              <select className="w-full p-2 border border-b-4 rounded">
-                <option>Cliente 1</option>
-                <option>Cliente 2</option>
-                <option>Cliente 3</option>
-              </select>
-            </div>
-            <hr
-              style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
-              className="w-full border-spacing-px"
-            />
-            <div className="flex justify-center mt-4">
-              <input
-                className="mb-4 p-2 items-center bg-gray-700 text-white rounded"
-                id="username"
-                type="text"
-                value={capturedWeight}
-                readOnly
+          {/* Capture Weight and Submit section */}
+          <div className="flex items-center h-screen w-96 justify-center">
+            <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md border-t-slate-800">
+              <h2 className="text-4xl text-center mb-4">Driver Login</h2>
+              <hr
+                style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
+                className="w-full border-spacing-px mb-8 md:mb-12"
               />
-            </div>
-            <div className="mb-4 flex justify-center">
-              <button
-                type="button"
-                className="w-1/2 bg-green text-white py-2 rounded hover:bg-green-600"
-                onClick={handleCaptureWeight}
-              >
-                Capture Weight
-              </button>
-            </div>
-            <hr
-              style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
-              className="w-full border-spacing-px "
-            />
-            <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                className="w-1/2 bg-green text-white py-2 rounded hover:bg-green-600"
-              >
-                Submit
-              </button>
+              <div className="mb-4">
+                <label className="block text-2xl text-gray-700 text-center mb-4">
+                  Select Client
+                </label>
+                <select className="w-full p-2 border border-b-4 rounded">
+                  <option>Cliente 1</option>
+                  <option>Cliente 2</option>
+                  <option>Cliente 3</option>
+                </select>
+              </div>
+              <hr
+                style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
+                className="w-full border-spacing-px"
+              />
+              <div className="flex justify-center mt-4">
+                <input
+                  className="mb-4 p-2 items-center bg-gray-700 text-white rounded"
+                  id="username"
+                  type="text"
+                  value={capturedWeight}
+                  readOnly
+                />
+              </div>
+              <div className="mb-4 flex justify-center">
+                <button
+                  type="button"
+                  className="w-1/2 bg-green text-white py-2 rounded hover:bg-green-600"
+                  onClick={handleCaptureWeight}
+                >
+                  Capture Weight
+                </button>
+              </div>
+              <hr
+                style={{ backgroundColor: "rgba(204, 218, 201, 1)" }}
+                className="w-full border-spacing-px "
+              />
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  className="w-1/2 bg-green text-white py-2 rounded hover:bg-green-600"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
           </div>
         </div>

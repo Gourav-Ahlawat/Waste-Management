@@ -48,7 +48,7 @@ const AdminLogin = () => {
         </div>
 
         <div
-          className="w-full md:w-1/3 flex flex-col p-6 md:p-12 items-center justify-center shadow-md opacity-75"
+          className="w-4/5 md:w-1/3 flex flex-col p-6 md:p-12 items-center justify-center shadow-md opacity-75"
           style={{ backgroundColor: "#E9FFE5" }}
         >
           <h2 className="text-2xl text-center pb-4">Admin Login</h2>
