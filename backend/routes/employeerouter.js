@@ -45,9 +45,49 @@ employeeUserRouter.get('/driver', driver_authenticate, (req, res) => {
 });
 
 employeeUserRouter.get('/driver/captureWeight', driver_authenticate, async (req, res) => {
-  // Simulate capture weight operation
-  client.publish('my/test/topic', 'Hello'); // Publish message to MQTT topic
-  res.json({ message: 'Weight capture initiated' });
+  // Publish message to MQTT topic
+  const publishPromise = new Promise((resolve, reject) => {
+    client.publish('my/test/topic', 'weight please', { qos: 1 }, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+
+  // Initialize weight variable
+  let capturedWeight = null;
+
+  // Promise to wait for a message
+  const messagePromise = new Promise((resolve, reject) => {
+    const weightReceivedCallback = (topic, message) => {
+      // Filter message by topic and content
+      if (topic === 'my/test/topic' && message.toString() !== 'weight please') {
+        client.removeListener('message', weightReceivedCallback); // Clean up listener
+        capturedWeight = message.toString();
+        resolve(capturedWeight);
+      }
+    };
+
+    client.on('message', weightReceivedCallback);
+
+    // Timeout in case no message is received
+    setTimeout(() => {
+      client.removeListener('message', weightReceivedCallback); // Clean up listener
+      reject(new Error('Timeout waiting for reply'));
+    }, 10000); // Reduced timeout to 10 seconds for testing
+  });
+
+  try {
+    await publishPromise;
+    // Await message response
+    const capturedWeight = await messagePromise;
+    res.json({ message: 'Weight captured', weight: capturedWeight });
+  } catch (error) {
+    console.error('Error capturing weight:', error);
+    res.status(500).json({ message: 'Error capturing weight' });
+  }
 });
 
 employeeUserRouter.post('/driver/clientrequest', driver_authenticate, async (req, res) => {

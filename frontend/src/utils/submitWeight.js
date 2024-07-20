@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SubmitWeight = async (capturedWeight) => {
+const SubmitWeight = async (weight) => {
     const token = localStorage.getItem('token');
     if (!token) {
         throw new Error('No token found');
@@ -8,11 +8,11 @@ const SubmitWeight = async (capturedWeight) => {
 
     try {
         const response = await axios.post('http://localhost:5000/user/driver/clientrequest', {
-            client_name: 'Cliente 1', // Replace with actual client name data
-            client_address: 'Client Address', // Replace with actual client address data
-            client_id: 'Client ID', // Replace with actual client ID data
-            timestamp: new Date().toISOString(), // Use current timestamp or adjust as needed
-            weight: 10,
+            client_name: 'Cliente 1',
+            client_address: 'Client Address',
+            client_id: 'Client ID',
+            timestamp: new Date().toISOString(),
+            weight: weight,
         }, {
             headers: { Authorization: `Bearer ${token}` },
         });

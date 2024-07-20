@@ -37,15 +37,15 @@ const Driver = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove the token from localStorage
-    navigate('/login'); // Redirect to the login page
+    localStorage.removeItem('token');
+    navigate('/');
   };
 
   const handleCaptureWeight = async () => {
     try {
-      const weightMessage = await CaptureWeight(); // Call CaptureWeight function
-      if (weightMessage) {
-        setCapturedWeight(weightMessage); // Update capturedWeight state with received message
+      const weightData = await CaptureWeight();
+      if (weightData && weightData.weight) {
+        setCapturedWeight(weightData.weight);
       } else {
         alert('No weight captured');
       }
@@ -57,15 +57,15 @@ const Driver = () => {
 
   const handleSubmitWeight = async () => {
     try {
-      const response = await SubmitWeight(capturedWeight); // Call SubmitWeight function with capturedWeight
+      const response = await SubmitWeight(capturedWeight);
       console.log('Submit weight response:', response);
       alert('Weight submitted successfully');
-      // Handle success or display confirmation to user
     } catch (error) {
       console.error('Error submitting weight:', error);
       alert('Failed to submit weight. Please try again.');
     }
   };
+
   if (isLoading) {
     return (
       <div class="text-center">
@@ -77,7 +77,7 @@ const Driver = () => {
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-    )
+    );
   }
 
   return (
