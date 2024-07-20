@@ -5,11 +5,12 @@ import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
 import RegisterUser from '../components/registerUser';
+import RegisterClient from '../components/registerClient';
 
 const Admin = () => {
   const [username, setUsername] = useState('Unknown');
   const [isLoading, setIsLoading] = useState(false);
-  const [showRegister, setShowRegister] = useState(false); // State to track if RegisterEmployee should be shown
+  const [mainContent, setMainContent] = useState(''); // State to track content
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -47,14 +48,20 @@ const Admin = () => {
               style={{ backgroundColor: "#DFEFDF" }}
             />
             <select className="text-2xl ml-2" onChange={(e) => {
-              if (e.target.value === 'Logout') {
+              const value = e.target.value;
+              if (value === 'Logout') {
                 handleLogout();
-              } else if (e.target.value === 'Register User') {
-                setShowRegister(true); // Show RegisterEmployee component
+              } else if (value === 'Register User') {
+                setMainContent('registerUser'); // Show RegisterUser component
+              } else if (value === 'Register Client') {
+                setMainContent('registerClient'); // Show RegisterClient component
+              } else {
+                setMainContent(''); // Default content
               }
             }}>
               <option>{username}</option>
               <option>Register User</option>
+              <option>Register Client</option>
               <option>Logout</option>
             </select>
           </div>
@@ -90,10 +97,13 @@ const Admin = () => {
             </div>
           </div>
         </div>
-        <div class="flex items-center h-fit w-auto justify-center p-10">
-        {showRegister && (
+        <div className="flex items-center h-fit w-auto justify-center p-10">
+          {mainContent === 'registerUser' && (
             <RegisterUser isAdmin={true} />
-        )}
+          )}
+          {mainContent === 'registerClient' && (
+            <RegisterClient isAdmin={true} />
+          )}
         </div>
       </div>
     </div>

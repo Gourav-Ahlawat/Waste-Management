@@ -4,6 +4,7 @@ import { TiUser } from "react-icons/ti";
 import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
 import FetchUserDetails from "../utils/fetchUserDetails";
 import BillingTable from "../components/billingTable";
+import RegisterClient from "../components/registerClient";
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
 import axios from 'axios';
@@ -15,6 +16,7 @@ const ManagerFin = () => {
   const [billings, setBillings] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   const [billDetails, setBillDetails] = useState(null);
+  const [mainContent, setMainContent] = useState('billing'); // Added state to track content
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -94,6 +96,17 @@ const ManagerFin = () => {
     navigate('/');
   };
 
+  const handleMainContentChange = (event) => {
+    const value = event.target.value;
+    if (value === 'Logout') {
+      handleLogout();
+    } else if (value === 'Register Client') {
+      setMainContent('registerClient');
+    } else {
+      setMainContent('billing');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="text-center">
@@ -123,13 +136,14 @@ const ManagerFin = () => {
               className="w-10 h-10 rounded-full p-1"
               style={{ backgroundColor: "#DFEFDF" }}
             />
-            <select className="text-2xl ml-2" onChange={handleLogout}>
+            <select className="text-2xl ml-2" onChange={handleMainContentChange}>
               <option>{username}</option>
+              <option>Register Client</option>
               <option>Logout</option>
             </select>
           </div>
         </div>
-        <div className="flex px-80 justify-end ">
+        <div className="flex px-80 justify-end">
           <div className="absolute left-0 top-0 h-screen w-64 p-8 shadow-lg z-10">
             <img src={logo} alt="Logo" className="w-40 h-auto mb-12 mx-auto" />
             <div className="flex flex-col items-center space-y-4">
@@ -146,41 +160,29 @@ const ManagerFin = () => {
               <div className="mt-12 space-y-6 text-gray-600">
                 <div className="flex items-center space-x-2 cursor-pointer">
                   <MdSupport className="w-8 h-8" />
-                  <button className="text-lg">Support</button>
+                  <span>Support</span>
                 </div>
                 <div className="flex items-center space-x-2 cursor-pointer">
                   <MdHistory className="w-8 h-8" />
-                  <button className="text-lg">History</button>
+                  <span>History</span>
                 </div>
                 <div className="flex items-center space-x-2 cursor-pointer">
                   <MdSettings className="w-8 h-8" />
-                  <button className="text-lg">Settings</button>
+                  <span>Settings</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="h-full flex flex-col justify-center items-center pt-10">
-          <BillingTable billings={billings} onGenerateBill={fetchClientBilling} />
-          {selectedClient && (
-            <div className="mt-10 p-6 bg-white shadow-md rounded">
-              <h2 className="text-xl font-semibold mb-4">Client Billing Information</h2>
-              <p><strong>Client Name:</strong> {selectedClient.client_name}</p>
-              <p><strong>Client Address:</strong> {selectedClient.client_address}</p>
-              <p><strong>Client ID:</strong> {selectedClient.client_id}</p>
-              <p><strong>Total Weight:</strong> {selectedClient.total_weight}</p>
-              <p><strong>Total Unpaid Weight:</strong> {selectedClient.total_unpaid_weight}</p>
-              {billDetails && (
-                <div>
-                  <h3 className="text-lg font-semibold mt-4">Bill Details</h3>
-                  <p><strong>Base Amount:</strong> Rs.{billDetails.baseAmount}</p>
-                  <p><strong>SGST:</strong> Rs.{billDetails.sgst.toFixed(2)}</p>
-                  <p><strong>CGST:</strong> Rs.{billDetails.cgst.toFixed(2)}</p>
-                  <p><strong>Total Amount:</strong> Rs.{billDetails.totalAmount.toFixed(2)}</p>
-                </div>
-              )}
-            </div>
-          )}
+          <div className="w-full ml-64 p-8">
+            {mainContent === 'billing' ? (
+              <BillingTable
+                billings={billings}
+                fetchClientBilling={fetchClientBilling}
+              />
+            ) : (
+              <RegisterClient />
+            )}
+          </div>
         </div>
       </div>
     </div>
