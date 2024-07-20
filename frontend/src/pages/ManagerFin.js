@@ -179,7 +179,6 @@ const ManagerFin = () => {
                   <p><strong>Total Amount:</strong> Rs.{billDetails.totalAmount.toFixed(2)}</p>
                 </div>
               )}
-              {/* Add other relevant information as needed */}
             </div>
           )}
         </div>

@@ -2,6 +2,8 @@ import express from 'express';
 import { driver_authenticate, managerops_authenticate, managerfin_authenticate } from '../middlewares/export.js';
 import { ClientModel, BillingModel } from '../model/export.js';
 import mqtt from 'mqtt';
+import bcrypt from 'bcryptjs';
+import { EmployeeModel } from '../model/export.js';
 
 const employeeUserRouter = express.Router();
 
@@ -106,9 +108,10 @@ employeeUserRouter.patch('/managerops/requests/:id', managerops_authenticate, as
       if (status === 'approved') {
         const data = await BillingModel.findOne({ client_id: result.client_id });
         if (data) {
-          const updatedData = { total_weight: data.total_weight + result.weight,
-             total_unpaid_weight: data.total_unpaid_weight + result.weight
-           };
+          const updatedData = {
+            total_weight: data.total_weight + result.weight,
+            total_unpaid_weight: data.total_unpaid_weight + result.weight
+          };
           const options = { new: true };
           await BillingModel.findOneAndUpdate(
             { client_id: result.client_id }, updatedData, options
@@ -133,6 +136,33 @@ employeeUserRouter.patch('/managerops/requests/:id', managerops_authenticate, as
   }
 });
 
+employeeUserRouter.post('/managerops/registerdriver', managerops_authenticate, async (req, res) => {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    phone_number: req.body.phone_number,
+    employee_id: req.body.employee_id,
+    role: req.body.role,
+    password: hashedPassword
+  };
+  if (data.role !== 'driver') {
+    res.status(400).json({ message: 'Role should be driver' });
+  }
+  try {
+    const result = await EmployeeModel.create(data);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error creating employee:', error); // Log the error for debugging
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.employee_id) {
+      res.status(400).json({ message: 'employee id already exists, use update if you want to update it' });
+    } else {
+      res.status(400).json({ message: error.message });
+    }
+  }
+});
+
 //manager finance routes
 employeeUserRouter.get('/managerfin', managerfin_authenticate, (req, res) => {
   res.json({ message: `Welcome manager finance ${req.user.employee_id}` });
@@ -152,8 +182,8 @@ employeeUserRouter.get('/managerfin/billing/:id', managerfin_authenticate, async
     const id = req.params.id;
     const data = await BillingModel.findOne({ client_id: id });
     if (data) {
-      if(data.total_unpaid_weight === 0){
-        res.status(200).json({ message: 'No unpaid weight', data: data});
+      if (data.total_unpaid_weight === 0) {
+        res.status(200).json({ message: 'No unpaid weight', data: data });
       } else {
         res.status(200).json(data);
       }

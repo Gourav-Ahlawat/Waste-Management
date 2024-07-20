@@ -16,7 +16,7 @@ adminRouter.get("/panel", admin_authenticate, function (req, res) {
 });
 
 //Post Method
-adminRouter.post('/post', admin_authenticate, async (req, res) => {
+adminRouter.post('/register', admin_authenticate, async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   const data = {

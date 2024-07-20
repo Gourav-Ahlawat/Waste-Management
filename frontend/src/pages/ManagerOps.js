@@ -5,6 +5,7 @@ import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
 import FetchUserDetails from "../utils/fetchUserDetails";
 import FetchPendingRequests from "../utils/fetchPendingRequests";
 import TableHeader from "../components/pendingApprovalsTable";
+import RegisterUser from "../components/registerUser";
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
 
@@ -13,6 +14,7 @@ const ManagerOps = () => {
   const [username, setUsername] = useState('Unknown');
   const [isLoading, setIsLoading] = useState(true);
   const [requests, setRequests] = useState([]);
+  const [mainContent, setMainContent] = useState('table'); // State to track which content to display
 
   const fetchRequests = useCallback(async () => {
     try {
@@ -49,6 +51,7 @@ const ManagerOps = () => {
   useEffect(() => {
     fetchRequests();
   }, [fetchRequests]);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -61,6 +64,17 @@ const ManagerOps = () => {
         request.client_id === id ? updatedRequest : request
       )
     );
+  };
+
+  const handleMainContentChange = (event) => {
+    const value = event.target.value;
+    if (value === 'Logout') {
+      handleLogout();
+    } else if (value === 'Register Driver') {
+      setMainContent('registerDriver');
+    } else {
+      setMainContent('table');
+    }
   };
 
   if (isLoading) {
@@ -83,6 +97,7 @@ const ManagerOps = () => {
         className="absolute inset-0 bg-cover bg-center flex-col"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
+        {/* Top panel */}
         <div
           className="w-full h-28 border-b-2 drop-shadow-md flex justify-end items-center"
           style={{ backgroundColor: "#F8FFF7" }}
@@ -92,13 +107,15 @@ const ManagerOps = () => {
               className="w-10 h-10 rounded-full p-1"
               style={{ backgroundColor: "#DFEFDF" }}
             />
-            <select className="text-2xl ml-2" onChange={handleLogout}>
+            <select className="text-2xl ml-2" onChange={handleMainContentChange}>
               <option>{username}</option>
+              <option>Register Driver</option>
               <option>Logout</option>
             </select>
           </div>
         </div>
-        <div className="flex px-80 justify-end ">
+        <div className="flex px-80 justify-end">
+          {/* Left panel */}
           <div className="absolute left-0 top-0 h-screen w-64 p-8 shadow-lg z-10">
             <img src={logo} alt="Logo" className="w-40 h-auto mb-12 mx-auto" />
             <div className="flex flex-col items-center space-y-4">
@@ -128,8 +145,13 @@ const ManagerOps = () => {
               </div>
             </div>
           </div>
+          {/* Main content */}
           <div className="flex items-center h-fit w-auto justify-center p-10">
-            <TableHeader requests={requests} fetchRequests={fetchRequests} onRequestUpdate={handleRequestUpdate} />
+            {mainContent === 'table' ? (
+              <TableHeader requests={requests} fetchRequests={fetchRequests} onRequestUpdate={handleRequestUpdate} />
+            ) : (
+              <RegisterUser />
+            )}
           </div>
         </div>
       </div>
