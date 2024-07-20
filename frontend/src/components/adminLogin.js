@@ -17,9 +17,13 @@ const AdminLogin = () => {
         admin_password: adminPassword,
       });
       if (response.data.message === 'Login successful') {
+        const { token } = response.data;
         alert('Login successful');
+
+        // Save the token to localStorage
+        localStorage.setItem('token', token);
         // Redirect to admin about page
-        navigate('/admin/about');
+        navigate('/admin');
       } else {
         alert('Invalid credentials');
       }

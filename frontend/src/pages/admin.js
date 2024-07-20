@@ -1,80 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { TiUser } from "react-icons/ti";
 import { MdSupport, MdHistory, MdSettings } from "react-icons/md";
-import FetchUserDetails from "../utils/fetchUserDetails";
-import FetchPendingRequests from "../utils/fetchPendingRequests";
-import TableHeader from "../components/pendingApprovalsTable";
-import RegisterUser from "../components/registerUser";
 import backgroundImage from "../images/bg.png";
 import logo from "../images/logo.png";
+import RegisterUser from '../components/registerUser';
 
-const ManagerOps = () => {
-  const navigate = useNavigate();
+const Admin = () => {
   const [username, setUsername] = useState('Unknown');
-  const [isLoading, setIsLoading] = useState(true);
-  const [requests, setRequests] = useState([]);
-  const [mainContent, setMainContent] = useState('table'); // State to track which content to display
-
-  const fetchRequests = useCallback(async () => {
-    try {
-      const data = await FetchPendingRequests();
-      setRequests(data);
-    } catch (error) {
-      console.error('Error fetching requests:', error);
-      alert('Failed to fetch requests. Please try again.');
-    }
-  }, []);
-
-  useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-        const userDetails = await FetchUserDetails();
-        if (userDetails) {
-          setUsername(userDetails.username);
-        } else {
-          alert('Please login to continue');
-          navigate('/');
-        }
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-        alert('Failed to fetch user details. Please try again.');
-        navigate('/');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getUserDetails();
-  }, [navigate]);
-
-  useEffect(() => {
-    fetchRequests();
-  }, [fetchRequests]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showRegister, setShowRegister] = useState(false); // State to track if RegisterEmployee should be shown
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
-  };
-
-  const handleRequestUpdate = (id, updatedRequest) => {
-    // Update the requests state with the updated request
-    setRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.client_id === id ? updatedRequest : request
-      )
-    );
-  };
-
-  const handleMainContentChange = (event) => {
-    const value = event.target.value;
-    if (value === 'Logout') {
-      handleLogout();
-    } else if (value === 'Register Driver') {
-      setMainContent('registerDriver');
-    } else {
-      setMainContent('table');
-    }
   };
 
   if (isLoading) {
@@ -97,7 +37,6 @@ const ManagerOps = () => {
         className="absolute inset-0 bg-cover bg-center flex-col"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
-        {/* Top panel */}
         <div
           className="w-full h-28 border-b-2 drop-shadow-md flex justify-end items-center"
           style={{ backgroundColor: "#F8FFF7" }}
@@ -107,15 +46,20 @@ const ManagerOps = () => {
               className="w-10 h-10 rounded-full p-1"
               style={{ backgroundColor: "#DFEFDF" }}
             />
-            <select className="text-2xl ml-2" onChange={handleMainContentChange}>
+            <select className="text-2xl ml-2" onChange={(e) => {
+              if (e.target.value === 'Logout') {
+                handleLogout();
+              } else if (e.target.value === 'Register User') {
+                setShowRegister(true); // Show RegisterEmployee component
+              }
+            }}>
               <option>{username}</option>
-              <option>Register Driver</option>
+              <option>Register User</option>
               <option>Logout</option>
             </select>
           </div>
         </div>
-        <div className="flex px-80 justify-end">
-          {/* Left panel */}
+        <div className="flex px-80 justify-end ">
           <div className="absolute left-0 top-0 h-screen w-64 p-8 shadow-lg z-10">
             <img src={logo} alt="Logo" className="w-40 h-auto mb-12 mx-auto" />
             <div className="flex flex-col items-center space-y-4">
@@ -126,7 +70,7 @@ const ManagerOps = () => {
                 />
                 <div>
                   <p className="text-lg text-center font-semibold mb-1">{username}</p>
-                  <p className="text-sm text-center text-gray-600">Manager Operations</p>
+                  <p className="text-sm text-center text-gray-600">Admin</p>
                 </div>
               </div>
               <div className="mt-12 space-y-6 text-gray-600">
@@ -145,18 +89,15 @@ const ManagerOps = () => {
               </div>
             </div>
           </div>
-          {/* Main content */}
-          <div className="flex items-center h-fit w-auto justify-center p-10">
-            {mainContent === 'table' ? (
-              <TableHeader requests={requests} fetchRequests={fetchRequests} onRequestUpdate={handleRequestUpdate} />
-            ) : (
-              <RegisterUser />
-            )}
-          </div>
+        </div>
+        <div class="flex items-center h-fit w-auto justify-center p-10">
+        {showRegister && (
+            <RegisterUser isAdmin={true} />
+        )}
         </div>
       </div>
     </div>
   );
 };
 
-export default ManagerOps;
+export default Admin;

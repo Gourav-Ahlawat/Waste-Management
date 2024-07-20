@@ -24,12 +24,12 @@ const ManagerFin = () => {
           setUsername(userDetails.username);
         } else {
           alert('Please login to continue');
-          navigate('/login');
+          navigate('/');
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
         alert('Failed to fetch user details. Please try again.');
-        navigate('/login');
+        navigate('/');
       } finally {
         setIsLoading(false);
       }
@@ -91,7 +91,7 @@ const ManagerFin = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   };
 
   if (isLoading) {

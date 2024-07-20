@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import backgroundImage from "../images/bg.png";
-import logo from "../images/logo.png";
 
-const RegisterEmployee = () => {
+const RegisterUser = ({ isAdmin = false }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [employeeId, setEmployeeId] = useState('');
     const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+        if (!name || !email || !phoneNumber || !employeeId || !role || !password || !confirmPassword) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
         const token = localStorage.getItem('token'); // Retrieve token from local storage
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/user/managerops/registerdriver',
+                isAdmin ? 'http://localhost:5000/admin/register' : 'http://localhost:5000/user/managerops/registerdriver',
                 {
                     name,
                     email,
@@ -35,13 +44,13 @@ const RegisterEmployee = () => {
             );
 
             if (response.status === 200) {
-                alert('Employee registered successfully');
-                navigate('/managerOps'); // Redirect to managerOps after successful registration
+                alert('User registered successfully');
+                navigate(isAdmin ? '/admin' : '/managerops');
             } else {
-                alert('Failed to register employee');
+                alert('Failed to register user');
             }
         } catch (error) {
-            console.error('Error registering employee', error);
+            console.error('Error registering user', error);
             alert('An error occurred. Please try again.');
         }
     };
@@ -53,16 +62,17 @@ const RegisterEmployee = () => {
                 style={{ backgroundColor: "#E9FFE5" }}
             >
                 <h2 className="text-2xl text-center pb-4">Register Employee</h2>
-                <form className="w-full " onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
+                <form className="w-full" onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
                     <div>
                         <input
-                            className="shadow mb-4 md:mb-8 appearance-none w-full h-14 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                            className="shadow mb-4 md:mb-8 appearance-none w-full h-14 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="name"
                             type="text"
                             style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </div>
                     <div>
@@ -74,6 +84,7 @@ const RegisterEmployee = () => {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                     <div>
@@ -85,6 +96,7 @@ const RegisterEmployee = () => {
                             placeholder="Phone Number"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
+                            required
                         />
                     </div>
                     <div>
@@ -96,17 +108,19 @@ const RegisterEmployee = () => {
                             placeholder="Employee ID"
                             value={employeeId}
                             onChange={(e) => setEmployeeId(e.target.value)}
+                            required
                         />
                     </div>
                     <div>
                         <input
                             className="shadow mb-4 md:mb-8 appearance-none w-full h-14 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="employee_id"
+                            id="role"
                             type="text"
                             style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
-                            placeholder="Employee Role"
+                            placeholder="Role"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
+                            required
                         />
                     </div>
                     <div>
@@ -118,6 +132,19 @@ const RegisterEmployee = () => {
                             style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <input
+                            className="shadow mb-4 md:mb-8 appearance-none w-full h-14 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="confirm_password"
+                            type="password"
+                            placeholder="Confirm Password"
+                            style={{ backgroundColor: "rgba(205, 224, 201, 1)" }}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between mb-4">
@@ -135,4 +162,4 @@ const RegisterEmployee = () => {
     );
 };
 
-export default RegisterEmployee;
+export default RegisterUser;
